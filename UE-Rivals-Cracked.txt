@@ -30,10 +30,6 @@ local schedulerFrame = 0
 local heartbeatConnection
 
 local function __step(id)
-    if control.stopped then
-        error('execution stopped', 0)
-    end
-
     local thread = coroutine.running()
     local state = budgets[thread]
 
@@ -61160,7 +61156,9 @@ function Backend.createRuntime()
                                                         if vmState[51] == vmState[45] then
                                                             vmState[50], vmState[2] = 20, 210
                                                         elseif vmState[53] == vmState[32] then
-                                                            if false then
+                                                            while-vmState[28] do
+                                                                __step(1379)
+
                                                                 vmState[47] = vmState[49]
                                                                 vmState[3], H = -vmState[26], vmState[54]
                                                             end
