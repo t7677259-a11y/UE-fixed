@@ -30,6 +30,10 @@ local schedulerFrame = 0
 local heartbeatConnection
 
 local function __step(id)
+    if control.stopped then
+        error('execution stopped', 0)
+    end
+
     local thread = coroutine.running()
     local state = budgets[thread]
 
@@ -60,7 +64,6 @@ local function __step(id)
     if state.ticks > 50000000 or now - state.started > 20 then
         control.error = 'Execution made no progress: loop ' .. tostring(id)
         control.status = 'error'
-        control.stopped = true
 
         if heartbeatConnection then
             heartbeatConnection:Disconnect()
@@ -111,7 +114,6 @@ local function runApplication()
     if not ok then
         control.error = result
         control.status = 'error'
-        control.stopped = true
 
         if heartbeatConnection then
             heartbeatConnection:Disconnect()
@@ -148,7 +150,6 @@ local function runApplication()
     if type(applicationLibrary) == 'table' and applicationLibrary ~= previousLibrary and typeof(applicationLibrary.ScreenGui) == 'Instance' then
         applicationLibrary.ScreenGui.Destroying:Connect(function()
             control.status = 'unloaded'
-            control.stopped = true
 
             if heartbeatConnection then
                 heartbeatConnection:Disconnect()
